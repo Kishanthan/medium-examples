@@ -1,4 +1,4 @@
-package hello.world.server;
+package com.example.passthrough;
 
 import io.micronaut.runtime.Micronaut;
 

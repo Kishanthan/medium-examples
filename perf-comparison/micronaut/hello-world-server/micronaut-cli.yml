@@ -1,5 +1,5 @@
 profile: service
-defaultPackage: hello.world.server
+defaultPackage: com.example.passthrough
 ---
 testFramework: junit
 sourceLanguage: java

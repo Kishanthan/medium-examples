@@ -12,14 +12,14 @@ service helloService on new http:Listener(9090) {
         path: "/hello"
     }
     resource function hello(http:Caller caller, http:Request request) {
-        http:Response outResponse = new;
 
-        var backendResponse = backEnd->get("/ballerina");
+        var backendResponse = backEnd->forward("/ballerina", request);
 
         if (backendResponse is http:Response) {
             var result = caller->respond(untaint backendResponse);
             handleError(result);
         } else if (backendResponse is error) {
+            http:Response outResponse = new;
             outResponse.setPayload(untaint string.convert(backendResponse.detail().message));
             var result = caller->respond(outResponse);
             handleError(result);
