@@ -19,6 +19,6 @@ public class PassThroughController {
 
     @Post(value = "/passthrough")
     public Flowable passThrough(@Body HelloReq helloReq) {
-        return httpClient.retrieve(HttpRequest.POST("/backend", helloReq));
+        return httpClient.exchange(HttpRequest.POST("/backend", helloReq));
     }
 }
