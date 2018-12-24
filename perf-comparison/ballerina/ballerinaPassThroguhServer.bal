@@ -1,34 +1,23 @@
 import ballerina/http;
-import ballerina/log;
+  
+http:Client nettyEP = new("http://localhost:8688/backend");
 
-http:Client backEnd = new("http://localhost:8686");
-
-@http:ServiceConfig {
-    basePath: "/passthrough"
-}
-service BallerinaPassThroughService on new http:Listener(9090) {
-
+@http:ServiceConfig {basePath:"/"}
+service passthroughService on new http:Listener(9090) {
     @http:ResourceConfig {
-        path: "/"
+        path:"/passthrough"
     }
-    resource function hello(http:Caller caller, http:Request request) {
+    resource function passthrough(http:Caller caller, http:Request clientRequest) {
+        var response = nettyEP -> forward("/", clientRequest);
 
-        var backendResponse = backEnd->forward("/backend", request);
-
-        if (backendResponse is http:Response) {
-            var result = caller->respond(untaint backendResponse);
-            handleError(result);
-        } else if (backendResponse is error) {
-            http:Response outResponse = new;
-            outResponse.setPayload(untaint string.convert(backendResponse.detail().message));
-            var result = caller->respond(outResponse);
-            handleError(result);
+        if (response is http:Response) {
+       	    var result = caller -> respond(response);
+        } else {
+            http:Response res = new;
+            res.statusCode = 500;
+            res.setPayload(<string> response.detail().message);
+            var result = caller->respond(res);
         }
     }
 }
 
-function handleError(error? result) {
-    if (result is error) {
-        log:printError(result.reason(), err = result);
-    }
-}
