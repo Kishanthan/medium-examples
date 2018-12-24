@@ -11,12 +11,12 @@ import javax.inject.Inject;
 @Controller
 public class PassThroughController {
 
-    @Client("http://localhost:8080/backend")
+    @Client("http://localhost:8080")
     @Inject
     HttpClient httpClient;
 
     @Get(value = "/passthrough")
     public Publisher<String> passThrough() {
-        return httpClient.retrieve("/");
+        return httpClient.retrieve("/backend");
     }
 }
