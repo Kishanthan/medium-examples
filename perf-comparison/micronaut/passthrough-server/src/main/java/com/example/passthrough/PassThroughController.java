@@ -17,6 +17,6 @@ public class PassThroughController {
 
     @Get(value = "/passthrough")
     public Publisher<String> passThrough() {
-        return httpClient.retrieve("/micronaut");
+        return httpClient.retrieve("/");
     }
 }

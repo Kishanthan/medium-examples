@@ -3,8 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example.passthrough</groupId>
-    <artifactId>pass-through-service</artifactId>
+    <artifactId>micronaut-pass-through-server</artifactId>
     <version>1.0</version>
+    <name>Micronaut PassThrough Server</name>
     <properties>
         <micronaut.version>1.0.1</micronaut.version>
         <jdk.version>1.8</jdk.version>
