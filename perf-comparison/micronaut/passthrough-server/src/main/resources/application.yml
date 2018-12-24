@@ -1,5 +1,8 @@
 micronaut:
     application:
-        name: pass-through-service
+            name: pass-through-service
     server:
+        netty:
+            worker:
+                threads: 8
         port: 9090
