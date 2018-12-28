@@ -6,7 +6,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.client.RxHttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 
 import javax.inject.Inject;
 
@@ -18,7 +18,7 @@ public class PassThroughController {
     RxHttpClient httpClient;
 
     @Post(value = "/passthrough")
-    public Flowable passThrough(@Body HelloReq helloReq) {
-        return httpClient.exchange(HttpRequest.POST("/backend", helloReq));
+    public Maybe passThrough(@Body HelloReq helloReq) {
+        return httpClient.retrieve(HttpRequest.POST("/backend", helloReq)).firstElement();
     }
 }

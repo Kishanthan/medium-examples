@@ -3,3 +3,7 @@ micronaut:
             name: pass-through-service
     server:
         port: 9090
+    http:
+        client:
+            pool:
+                enabled: true

@@ -1,26 +1,30 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 )
 
-func handler(res http.ResponseWriter, req *http.Request) {
-	url, _ := url.Parse("http://localhost:8688/backend")
+var client = &http.Client{}
 
-	proxy := httputil.NewSingleHostReverseProxy(url)
-
-	req.URL.Host = url.Host
-	req.URL.Scheme = url.Scheme
-	req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-	req.Host = url.Host
-
-	proxy.ServeHTTP(res, req)
+func handler(w http.ResponseWriter, req *http.Request) {
+	backendReq, _ := http.NewRequest(req.Method, "http://localhost:8688/backend", req.Body)
+	resp, _ := client.Do(backendReq)
+	body, _ := ioutil.ReadAll(resp.Body)
+	w.Write(body)
 }
 
 func main() {
+	httpTransport := &http.Transport{
+		MaxIdleConns:        250,
+		MaxIdleConnsPerHost: 250,
+		MaxConnsPerHost:     250,
+	}
+
+	client.Transport = httpTransport
+
 	http.HandleFunc("/passthrough", handler)
 	log.Fatal(http.ListenAndServe(":9090", nil))
 }
+
